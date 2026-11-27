@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IQsquared</title>
+<meta name="theme-color" content="#0e0d14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="IQsquared">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{--bg:#0e0d14;--pn:#16151f;--ln:#26243a;--tx:#e7e5f2;--mu:#8d8aa5;--vi:#9b8cff;--am:#e8b84a;--rd:#ff7a8a;--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#app{display:flex;height:100%;flex-direction:column}
+nav{order:2;display:flex;background:var(--pn);border-top:1px solid var(--ln);padding-bottom:var(--sab)}
+nav a{flex:1;text-align:center;padding:9px 0 7px;color:var(--mu);text-decoration:none;font-size:11px}
+nav a b{display:block;font-size:19px;font-weight:400;line-height:1.2}
+nav a.on{color:var(--vi)}
+nav h1{display:none}
+main{order:1;flex:1;overflow:auto;padding:calc(14px + var(--sat)) 16px 24px;position:relative}
+.wrap{max-width:760px;margin:0 auto}
+@media(min-width:900px){#app{flex-direction:row}nav{order:0;flex-direction:column;width:190px;border-top:0;border-right:1px solid var(--ln);padding:18px 10px}nav h1{display:block;font-size:15px;margin:0 8px 16px;color:var(--vi)}nav a{text-align:left;padding:9px 10px;border-radius:8px;font-size:14px;display:flex;gap:10px;align-items:center}nav a b{font-size:16px;width:20px;display:inline}nav a.on{background:#211f33}}
+h1,h2,h3,h4{line-height:1.25;margin:1.2em 0 .4em}h2{font-size:19px}h3{font-size:16px}
+.top{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+input,textarea,select{width:100%;background:var(--pn);border:1px solid var(--ln);color:var(--tx);border-radius:9px;padding:10px 12px;font:inherit}
+textarea{min-height:46vh;font:13px/1.5 ui-monospace,Menlo,monospace}
+input:focus,textarea:focus,select:focus,button:focus-visible,a:focus-visible{outline:2px solid var(--vi);outline-offset:1px}
+button{background:var(--vi);color:#14121f;border:0;border-radius:9px;padding:10px 14px;font:600 14px inherit;cursor:pointer;white-space:nowrap}
+button.g{background:var(--pn);color:var(--tx);border:1px solid var(--ln)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px}
+.chip{padding:5px 11px;border-radius:99px;border:1px solid var(--ln);background:var(--pn);color:var(--mu);font-size:13px;cursor:pointer}
+.chip.on{border-color:var(--vi);color:var(--vi)}
+.card{display:block;background:var(--pn);border:1px solid var(--ln);border-radius:11px;padding:11px 13px;margin-bottom:8px;color:inherit;text-decoration:none}
+.card small,.mu{color:var(--mu);font-size:12.5px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;background:#cfcddb}
+.dot.synthesis{background:var(--vi)}.dot.action{background:var(--am)}
+a.wl{color:var(--vi)}a.wl.ghost{color:var(--mu);border-bottom:1px dashed var(--mu);text-decoration:none}a.tag{color:var(--am);text-decoration:none}
+.md ul,.md ol{padding-left:22px}.md li{margin:.35em 0}
+.row{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--ln)}
+.st{min-width:68px;padding:5px 0;font-size:12px}.st.todo{background:var(--pn);color:var(--mu);border:1px solid var(--ln)}.st.doing{background:var(--am)}.st.done{background:#3b3a52;color:var(--mu)}
+.done+div .t{text-decoration:line-through;color:var(--mu)}
+#gw{position:absolute;inset:0;overflow:hidden}canvas{width:100%;height:100%;display:block;touch-action:none}
+#gui{position:absolute;left:12px;right:12px;top:calc(10px + var(--sat))}
+#gsel{position:absolute;left:12px;right:12px;bottom:12px;background:var(--pn);border:1px solid var(--ln);border-radius:11px;padding:10px 12px;display:none;gap:10px;align-items:center;justify-content:space-between}
+#toast{position:fixed;left:50%;bottom:calc(76px + var(--sab));transform:translateX(-50%);background:#2a2842;border-radius:9px;padding:9px 14px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s}#toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div id="app">
+<nav id="nav"><h1>IQsquared</h1>
+<a href="#notes" data-v="notes"><b>▤</b>Notes</a><a href="#graph" data-v="graph"><b>◉</b>Graph</a><a href="#think" data-v="think"><b>✦</b>Think</a><a href="#actions" data-v="actions"><b>☑</b>Actions</a><a href="#import" data-v="import"><b>⇪</b>Import</a></nav>
+<main id="main"></main>
+</div>
+<div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),main=$('#main'),K='sb.v1';
+const TY=['source','synthesis','action'],OT='Opportunities & Trends',GA='Growth Action List';
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const key=t=>t.trim().toLowerCase();
+const links=b=>[...new Set([...b.matchAll(/\[\[([^\]|#]+)(?:\|[^\]]*)?\]\]/g)].map(m=>m[1].trim()))];
+const tags=b=>[...new Set([...b.matchAll(/(?:^|\s)#([\w-]+)/g)].map(m=>m[1].toLowerCase()))];
+let S={notes:{},actions:[],key:''},st;
+/* ---------- persistence: IndexedDB with localStorage fallback ---------- */
+const idb=()=>new Promise((r,j)=>{const q=indexedDB.open('sb',1);q.onupgradeneeded=()=>q.result.createObjectStore('kv');q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error)});
+async function load(){try{const d=await idb();const v=await new Promise(r=>{const q=d.transaction('kv').objectStore('kv').get('s');q.onsuccess=()=>r(q.result);q.onerror=()=>r(null)});if(v)return v}catch(e){}try{return JSON.parse(localStorage.getItem(K))}catch(e){return null}}
+function save(){clearTimeout(st);st=setTimeout(async()=>{try{const d=await idb();d.transaction('kv','readwrite').objectStore('kv').put(S,'s')}catch(e){try{localStorage.setItem(K,JSON.stringify(S))}catch(_){}}},150)}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)}
+/* ---------- model ---------- */
+function put(title,body,ty){title=title.trim();const k=key(title),o=S.notes[k];S.notes[k]={t:o?o.t:title,b:body,ty:ty||(o&&o.ty)||'source',u:Date.now()};save();return S.notes[k]}
+function back(k){return Object.values(S.notes).filter(n=>key(n.t)!==k&&links(n.b).some(l=>key(l)===k))}
+function actionNote(){const g=s=>S.actions.filter(a=>a.st===s).map(a=>`- [${s==='done'?'x':' '}] ${a.text} — [[${a.src}]]`).join('\n')||'- (none)';
+put(GA,`# ${GA}\nEvery move traces back to [[${OT}]].\n\n## Doing\n${g('doing')}\n\n## To do\n${g('todo')}\n\n## Done\n${g('done')}`,'action')}
+/* ---------- markdown ---------- */
+function md(src){const o=[];let l=null;const cl=()=>{if(l){o.push(`</${l}>`);l=null}};
+const inl=s=>esc(s).replace(/\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g,(m,a,b)=>`<a class="wl${S.notes[key(a)]?'':' ghost'}" href="#n/${encodeURIComponent(a.trim())}">${b||a}</a>`).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/(^|\s)#([\w-]+)/g,'$1<a class="tag" href="#t/$2">#$2</a>');
+for(const x of src.split('\n')){let m;if(m=x.match(/^(#{1,4})\s+(.*)/)){cl();const n=Math.min(4,m[1].length+1);o.push(`<h${n}>${inl(m[2])}</h${n}>`)}
+else if(m=x.match(/^\s*(?:[-*]|(\d+)[.)])\s+(.*)/)){const t=m[1]?'ol':'ul';if(l!==t){cl();l=t;o.push(`<${t}>`)}o.push(`<li>${inl(m[2])}</li>`)}
+else if(!x.trim())cl();else{cl();o.push(`<p>${inl(x)}</p>`)}}cl();return o.join('')}
+/* ---------- synthesis ---------- */
+const sources=()=>Object.values(S.notes).filter(n=>n.ty==='source');
+function localSynth(){const src=sources(),trends=[],opps=[];
+const hubs=Object.values(S.notes).map(n=>({n,b:back(key(n.t)).filter(x=>x.ty==='source')})).filter(h=>h.b.length>=2).sort((a,b)=>b.b.length-a.b.length).slice(0,4);
+hubs.forEach(h=>trends.push({text:`**${h.n.t}** recurs across ${h.b.length} source notes, which makes it a hub worth tracking.`,sources:h.b.slice(0,4).map(x=>x.t)}));
+const re=/\b(should|need|needs|build|launch|close|fix|gap|leak|bottleneck|systemi[sz]e|opportunit\w*|missing|wedge)\b/i;
+src.forEach(n=>n.b.split('\n').forEach(x=>{const t=x.replace(/^\s*(?:[-*]|\d+[.)])\s+/,'').trim();if(t.length>25&&t.length<260&&!t.startsWith('#')&&re.test(t))opps.push({text:t.replace(/\[\[([^\]|]+)(?:\|[^\]]*)?\]\]/g,'$1'),sources:[n.t],score:links(t).length+back(key(n.t)).length+1})}));
+opps.sort((a,b)=>b.score-a.score);return{trends,opps:opps.slice(0,6)}}
+async function claudeSynth(){const corpus=sources().map(n=>`### ${n.t}\n${n.b}`).join('\n\n').slice(0,60000);
+const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':S.key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-5-5',max_tokens:2500,system:'You synthesize a personal knowledge vault. Use ONLY facts in the notes; never invent metrics. Find non-obvious cross-note patterns, tensions and gaps. Return ONLY JSON: {"trends":[{"text":"","sources":["exact note titles"]}],"opps":[{"text":"","sources":["exact note titles"]}]}. Opps ranked by leverage, highest first, max 7. Trends max 5.',messages:[{role:'user',content:corpus}]})});
+if(!r.ok)throw new Error('API '+r.status);const d=await r.json();return JSON.parse(d.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim())}
+async function synth(){let r,how='local';if(!sources().length){toast('Add source notes first');return}
+if(S.key){try{toast('Asking Claude…');r=await claudeSynth();how='Claude'}catch(e){toast('Claude failed, using local synthesis');r=null}}
+if(!r)r=localSynth();
+const L=s=>s.map(x=>`[[${x}]]`).join(', ');
+const body=`# ${OT}\nThe thinking layer. What the brain is telling me right now, updated as new signal comes in. Last reviewed ${new Date().toISOString().slice(0,10)}.\n\n## Trends\n${r.trends.map(t=>`- ${t.text} Source: ${L(t.sources||[])}.`).join('\n')||'- No cross-note patterns yet. Add more linked source notes.'}\n\n## Opportunities (ranked by leverage)\n${r.opps.map((o,i)=>`${i+1}. ${o.text} See ${L(o.sources||[])}.`).join('\n')||'1. None found yet.'}\n\n## How this feeds action\nEvery opportunity here should turn into a move in [[${GA}]].\n\n## Connections\n[[${GA}]]${S.notes.home?' · [[Home]]':''}`;
+put(OT,body,'synthesis');
+r.opps.forEach(o=>{const t=o.text.replace(/\*\*/g,'').split(/(?<=[.!?])\s/)[0].slice(0,140);if(!S.actions.some(a=>a.text===t))S.actions.push({id:Date.now()+Math.random(),text:t,src:(o.sources&&o.sources[0])||OT,st:'todo'})});
+actionNote();save();toast(`Synthesis updated (${how})`);location.hash='#think';route()}
+/* ---------- seed ---------- */
+function seed(){S={notes:{},actions:[],key:S.key||''};[
+['Home','synthesis','# Home\nHub for the vault. Start at [[Opportunities & Trends]] and [[Growth Action List]].\n\nSources: [[Research & Market Intelligence]], [[Sales Calls]], [[Hook style]], [[Short-form repurposing engine]], [[AI for entrepreneurs positioning]], [[Top content teardown]], [[Comment-to-DM funnel]], [[Audience & Funnel data]], [[YouTube]], [[Product & Offer]], [[Brand Partnerships]], [[TikTok]]'],
+['Research & Market Intelligence','source','# Research & Market Intelligence\n- The market wants AI implementation, not theory. Businesses know AI matters; they can\'t operationalize it. #market\n- The competitor field teaches "start an AI agency". We need to teach owners to run AI in their own business: that gap is the wedge, see [[AI for entrepreneurs positioning]].'],
+['Sales Calls','source','# Sales Calls\nSample note. Paste real call notes here and link people as [[1-1 call with Name]].\n- Buyers ask for implementation help, see [[Research & Market Intelligence]].'],
+['Hook style','source','# Hook style\n- Low-production, phone-style short-form still wins the algorithms. High polish works against reach. #content\n- Feeds [[Short-form repurposing engine]].'],
+['Short-form repurposing engine','source','# Short-form repurposing engine\n- Use [[TikTok]] as the hook lab: cheapest reach to test, then promote winners to Instagram and [[YouTube]]. See [[Hook style]].'],
+['AI for entrepreneurs positioning','source','# AI for entrepreneurs positioning\n- Almost no one teaches owners to run AI in their own business. We should own that lane. See [[Research & Market Intelligence]] and [[Product & Offer]].'],
+['Top content teardown','source','# Top content teardown\n- Nine of the top ten videos are top-of-funnel prompts and AI news. Nothing that sells the offer reaches the top tier.\n- The one mid-funnel winner is the Instagram "Million dollar app idea" video (257K). We should build a repeatable "build the business thing with Claude" bridge series. See [[Product & Offer]].'],
+['Comment-to-DM funnel','source','# Comment-to-DM funnel\n- Combined reach is about 399K but the captured list is far smaller. We need to close the reach-to-capture leak: tightening this funnel turns existing attention into pipeline. See [[Audience & Funnel data]] and [[Top content teardown]].'],
+['Audience & Funnel data','source','# Audience & Funnel data\n- Combined reach ~399K; captured list far smaller. Feeds [[Comment-to-DM funnel]].'],
+['YouTube','source','# YouTube\n- Tiny (2.24K) but it is the channel that pre-sells the course. We should build out long-form, the under-built asset. See [[Product & Offer]].'],
+['Product & Offer','source','# Product & Offer\n- The offer is validated and the audience exists. We should launch the course and community to the existing audience. See [[Comment-to-DM funnel]].'],
+['Brand Partnerships','source','# Brand Partnerships\n- We should systematize repeatable paid deals: they fund everything else and grow with the audience.'],
+['TikTok','source','# TikTok\n- Hook lab. See [[Short-form repurposing engine]].']
+].forEach(([t,ty,b])=>put(t,b,ty));
+S.notes.home.b+='\n\nThis is sample data from your screenshots. Clear it under Import.';synth()}
+/* ---------- views ---------- */
+let keepEdit=false,filt='all',q='',afilt='all',edit=false;
+const chips=(arr,cur,fn)=>`<div class="chips">${arr.map(a=>`<span class="chip ${a===cur?'on':''}" data-c="${a}">${a}</span>`).join('')}</div>`;
+function bindChips(fn){main.querySelectorAll('.chip').forEach(c=>c.onclick=()=>fn(c.dataset.c))}
+function vNotes(tag){let L=Object.values(S.notes);if(tag)L=L.filter(n=>tags(n.b).includes(tag));if(filt!=='all')L=L.filter(n=>n.ty===filt);
+if(q){const s=q.toLowerCase();L=s[0]==='#'?L.filter(n=>tags(n.b).includes(s.slice(1))):L.filter(n=>(n.t+' '+n.b).toLowerCase().includes(s))}
+L.sort((a,b)=>b.u-a.u);
+main.innerHTML=`<div class="wrap"><div class="top"><input id="q" placeholder="Search notes or #tag" value="${esc(q)}"><button id="new">New</button></div>${tag?`<p class="mu">Tag #${esc(tag)} · <a class="wl" href="#notes">clear</a></p>`:''}${chips(['all',...TY],filt)}${L.map(n=>`<a class="card" href="#n/${encodeURIComponent(n.t)}"><span class="dot ${n.ty}"></span><b>${esc(n.t)}</b> <small>${back(key(n.t)).length} backlinks</small><br><small>${esc(n.b.replace(/[#*\[\]]/g,'').slice(0,110))}</small></a>`).join('')||'<p class="mu">No notes match. Tap New or import a batch.</p>'}</div>`;
+$('#q').oninput=e=>{q=e.target.value;const p=e.target.selectionStart;vNotes(tag);$('#q').focus();$('#q').setSelectionRange(p,p)};
+$('#new').onclick=()=>{const t=prompt('Note title');if(t){if(!S.notes[key(t)])put(t,`# ${t}\n`,'source');keepEdit=true;location.hash='#n/'+encodeURIComponent(t)}};bindChips(c=>{filt=c;vNotes(tag)})}
+function vNote(t){const n=S.notes[key(t)];
+if(!n){main.innerHTML=`<div class="wrap"><h2>${esc(t)}</h2><p class="mu">This note doesn't exist yet. It is linked from other notes.</p><button id="mk">Create note</button></div>`;$('#mk').onclick=()=>{put(t,`# ${t}\n`,'source');edit=true;vNote(t)};return}
+const bl=back(key(n.t));
+main.innerHTML=`<div class="wrap"><div class="top"><button class="g" onclick="history.back()">Back</button><span style="flex:1"></span><button class="g" id="ed">${edit?'Cancel':'Edit'}</button></div>
+<span class="mu"><span class="dot ${n.ty}"></span>${n.ty}</span>
+${edit?`<select id="ty" style="margin:8px 0">${TY.map(x=>`<option ${x===n.ty?'selected':''}>${x}</option>`).join('')}</select><textarea id="bd">${esc(n.b)}</textarea><div class="top" style="margin-top:10px"><button id="sv">Save</button><button class="g" id="dl">Delete</button></div>`:`<div class="md">${md(n.b)}</div>`}
+<h3>Backlinks <small class="mu">${bl.length}</small></h3>${bl.map(b=>`<a class="card" href="#n/${encodeURIComponent(b.t)}"><span class="dot ${b.ty}"></span>${esc(b.t)}</a>`).join('')||'<p class="mu">No notes link here yet.</p>'}</div>`;
+$('#ed').onclick=()=>{edit=!edit;vNote(t)};
+if(edit){$('#sv').onclick=()=>{put(n.t,$('#bd').value,$('#ty').value);edit=false;vNote(t)};$('#dl').onclick=()=>{if(confirm('Delete this note?')){delete S.notes[key(n.t)];save();location.hash='#notes'}}}}
+function vThink(){const n=S.notes[key(OT)];main.innerHTML=`<div class="wrap"><div class="top"><button id="sy">${S.key?'Synthesize with Claude':'Synthesize'}</button><a class="wl" href="#n/${encodeURIComponent(OT)}">open as note</a></div><p class="mu">${S.key?'Uses your Anthropic key from Import.':'Local mode finds hubs and action-worded lines. Add an API key under Import for deeper synthesis.'}</p><div class="md">${n?md(n.b):'<p class="mu">No synthesis yet. Add source notes, then tap Synthesize.</p>'}</div></div>`;$('#sy').onclick=synth}
+function vActions(){const L=S.actions.filter(a=>afilt==='all'||a.st===afilt);
+main.innerHTML=`<div class="wrap"><h2 style="margin-top:0">${GA}</h2><div class="top"><input id="na" placeholder="Add an action"><button id="ad">Add</button></div>${chips(['all','todo','doing','done'],afilt)}${L.map(a=>`<div class="row"><button class="st ${a.st}" data-i="${a.id}">${a.st}</button><div><div class="t">${esc(a.text)}</div><small class="mu">from <a class="wl" href="#n/${encodeURIComponent(a.src)}">${esc(a.src)}</a></small></div></div>`).join('')||'<p class="mu">Nothing here. Synthesize opportunities to generate actions.</p>'}</div>`;
+main.querySelectorAll('.st').forEach(b=>b.onclick=()=>{const a=S.actions.find(x=>String(x.id)===b.dataset.i);a.st={todo:'doing',doing:'done',done:'todo'}[a.st];actionNote();vActions()});
+$('#ad').onclick=()=>{const v=$('#na').value.trim();if(v){S.actions.push({id:Date.now(),text:v,src:OT,st:'todo'});actionNote();vActions()}};bindChips(c=>{afilt=c;vActions()})}
+function addBatch(files){let n=0;for(const[t,b]of files){put(t,b,'source');n++}toast(`Imported ${n} note${n===1?'':'s'}`)}
+function dl(name,txt,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;a.click()}
+function vImport(){main.innerHTML=`<div class="wrap"><h2 style="margin-top:0">Bulk import</h2><p class="mu">Paste notes. Each line starting with "# " begins a new note. Existing titles are updated.</p><textarea id="pt" placeholder="# Note title&#10;Text with [[wikilinks]] and #tags"></textarea>
+<div class="top" style="margin-top:10px"><button id="go">Import</button><button class="g" id="go2">Import and synthesize</button></div>
+<p class="mu">Or upload files (.md, .txt, one note per file)</p><input type="file" id="fi" multiple accept=".md,.txt,.markdown,text/*">
+<h2>Backup</h2><div class="top"><button class="g" id="ej">Export JSON</button><button class="g" id="em">Export Markdown</button></div><p class="mu">Restore from JSON</p><input type="file" id="ij" accept=".json">
+<h2>Claude API key (optional)</h2><p class="mu">Stored only on this device. Used to call Anthropic directly from your browser for synthesis.</p><input id="ak" type="password" placeholder="sk-ant-…" value="${esc(S.key||'')}" autocomplete="off">
+<h2>Data</h2><div class="top"><button class="g" id="sd">Load sample data</button><button class="g" id="ca" style="color:var(--rd)">Clear everything</button></div></div>`;
+const split=txt=>{const parts=txt.split(/^(?=# [^\n]+)/m).filter(p=>p.trim());return parts.map((p,i)=>{const m=p.match(/^# (.+)/);return[m?m[1].trim():'Untitled '+(Date.now()%10000+i),p.trim()]})};
+$('#go').onclick=()=>{addBatch(split($('#pt').value));$('#pt').value='';};
+$('#go2').onclick=()=>{addBatch(split($('#pt').value));synth()};
+$('#fi').onchange=async e=>{const f=[];for(const x of e.target.files){const b=(await x.text()).replace(/^---[\s\S]*?---\n/,'');f.push([x.name.replace(/\.\w+$/,''),b])}addBatch(f)};
+$('#ej').onclick=()=>dl('second-brain.json',JSON.stringify({...S,key:''},null,1),'application/json');
+$('#em').onclick=()=>dl('second-brain.md',Object.values(S.notes).map(n=>`<!-- type:${n.ty} -->\n${n.b}`).join('\n\n---\n\n'),'text/markdown');
+$('#ij').onchange=async e=>{try{const d=JSON.parse(await e.target.files[0].text());if(!d.notes)throw 0;S={...d,key:S.key};save();toast('Restored')}catch(_){toast('Not a valid backup file')}};
+$('#ak').onchange=e=>{S.key=e.target.value.trim();save();toast('Key saved on this device')};
+$('#sd').onclick=()=>{if(confirm('Replace everything with sample data?'))seed()};
+$('#ca').onclick=()=>{if(confirm('Delete all notes and actions?')){S={notes:{},actions:[],key:S.key};save();toast('Cleared');route()}}}
+/* ---------- graph ---------- */
+let G=null,V={x:0,y:0,k:1},gq='',gty='all',sel=null,alpha=1,cv,cx,raf;
+function build(){const ids={},nodes=[],ed=new Set(),edges=[],old=G?Object.fromEntries(G.nodes.map(n=>[n.k,n])):{};
+const add=(k,t,ty,tg)=>{if(ids[k]===undefined){const o=old[k];ids[k]=nodes.length;nodes.push({k,t,ty,tg:tg||[],deg:0,x:o?o.x:(Math.random()-.5)*300,y:o?o.y:(Math.random()-.5)*300,vx:0,vy:0})}return ids[k]};
+Object.values(S.notes).forEach(n=>add(key(n.t),n.t,n.ty,tags(n.b)));
+Object.values(S.notes).forEach(n=>links(n.b).forEach(l=>{const a=ids[key(n.t)],b=add(key(l),l,'ghost');const e=Math.min(a,b)+'-'+Math.max(a,b);if(a!==b&&!ed.has(e)){ed.add(e);edges.push([a,b]);nodes[a].deg++;nodes[b].deg++}}));
+G={nodes,edges};alpha=1}
+function step(){const N=G.nodes;for(let i=0;i<N.length;i++)for(let j=i+1;j<N.length;j++){const a=N[i],b=N[j];let dx=a.x-b.x,dy=a.y-b.y,d=dx*dx+dy*dy+.5;if(d>90000)continue;const f=2200/d*alpha;dx*=f;dy*=f;a.vx+=dx;a.vy+=dy;b.vx-=dx;b.vy-=dy}
+for(const[i,j]of G.edges){const a=N[i],b=N[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||1,f=(d-70)*.03*alpha;a.vx+=dx/d*f;a.vy+=dy/d*f;b.vx-=dx/d*f;b.vy-=dy/d*f}
+for(const n of N){n.vx-=n.x*.004*alpha;n.vy-=n.y*.004*alpha;n.x+=n.vx;n.y+=n.vy;n.vx*=.8;n.vy*=.8}alpha*=.985}
+const rad=n=>3.5+Math.sqrt(n.deg)*2.6,col={source:'#cfcddb',synthesis:'#9b8cff',action:'#e8b84a',ghost:'#5a5870'};
+const hit=n=>(!gq||(gq[0]==='#'?n.tg.includes(gq.slice(1)):n.t.toLowerCase().includes(gq)))&&(gty==='all'||n.ty===gty);
+function draw(){if(!cx)return;const dpr=devicePixelRatio||1,w=cv.width/dpr,h=cv.height/dpr;cx.setTransform(dpr,0,0,dpr,0,0);cx.clearRect(0,0,w,h);const N=G.nodes,nb=new Set();
+if(sel!=null)G.edges.forEach(([a,b])=>{if(a===sel)nb.add(b);if(b===sel)nb.add(a)});
+const X=n=>V.x+n.x*V.k,Y=n=>V.y+n.y*V.k;
+for(const[a,b]of G.edges){const on=sel!=null&&(a===sel||b===sel);cx.strokeStyle=on?'rgba(155,140,255,.8)':'rgba(140,135,180,.22)';cx.lineWidth=on?1.4:.7;cx.beginPath();cx.moveTo(X(N[a]),Y(N[a]));cx.lineTo(X(N[b]),Y(N[b]));cx.stroke()}
+cx.font='11px system-ui';cx.textAlign='center';
+N.forEach((n,i)=>{const m=hit(n),f=sel==null||i===sel||nb.has(i);cx.globalAlpha=m?(f?1:.35):.12;cx.fillStyle=i===sel?'#fff':col[n.ty];cx.beginPath();cx.arc(X(n),Y(n),rad(n)*Math.min(1.4,Math.max(.7,V.k)),0,7);cx.fill();
+if(m&&(V.k>.8||n.deg>=3||i===sel||nb.has(i))){cx.fillStyle='#e7e5f2';cx.fillText(n.t.length>26?n.t.slice(0,25)+'…':n.t,X(n),Y(n)+rad(n)*V.k+12)}});cx.globalAlpha=1}
+function loop(){cancelAnimationFrame(raf);const f=()=>{if(alpha>.02){step();draw();raf=requestAnimationFrame(f)}};f()}
+function zoom(f,x,y){const k=Math.min(4,Math.max(.2,V.k*f));f=k/V.k;V.x=x-(x-V.x)*f;V.y=y-(y-V.y)*f;V.k=k}
+function showSel(){const b=$('#gsel');if(sel==null){b.style.display='none';return}const n=G.nodes[sel];b.style.display='flex';b.innerHTML=`<div><span class="dot ${n.ty==='ghost'?'':n.ty}"></span><b>${esc(n.t)}</b><br><small class="mu">${n.deg} connections${n.ty==='ghost'?' · not created yet':''}</small></div><button id="op">Open</button>`;$('#op').onclick=()=>{location.hash='#n/'+encodeURIComponent(n.t)}}
+function vGraph(){main.style.padding='0';main.innerHTML=`<div id="gw"><canvas id="cv"></canvas><div id="gui"><input id="gs" placeholder="Search or #tag" value="${esc(gq)}" style="background:rgba(22,21,31,.92)"><div class="chips" style="margin:8px 0 0">${['all',...TY,'ghost'].map(a=>`<span class="chip ${a===gty?'on':''}" data-c="${a}" style="background:rgba(22,21,31,.92)">${a}</span>`).join('')}</div></div><div id="gsel"></div></div>`;
+cv=$('#cv');const r=$('#gw').getBoundingClientRect(),dpr=devicePixelRatio||1;cv.width=r.width*dpr;cv.height=r.height*dpr;cx=cv.getContext('2d');build();V={x:r.width/2,y:r.height/2,k:r.width<500?.8:1};sel=null;
+const P=new Map();let mv=0,ld=0;
+cv.onpointerdown=e=>{cv.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.offsetX,y:e.offsetY});mv=0;ld=0};
+cv.onpointermove=e=>{const p=P.get(e.pointerId);if(!p)return;const nx=e.offsetX,ny=e.offsetY;if(P.size===1){V.x+=nx-p.x;V.y+=ny-p.y;mv+=Math.abs(nx-p.x)+Math.abs(ny-p.y)}p.x=nx;p.y=ny;if(P.size===2){const[a,b]=[...P.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(ld)zoom(d/ld,(a.x+b.x)/2,(a.y+b.y)/2);ld=d;mv+=10}draw()};
+cv.onpointerup=cv.onpointercancel=e=>{if(P.size===1&&mv<6){const x=e.offsetX,y=e.offsetY;let best=null,bd=1e9;G.nodes.forEach((n,i)=>{const d=Math.hypot(V.x+n.x*V.k-x,V.y+n.y*V.k-y);if(d<bd&&d<rad(n)*V.k+14){bd=d;best=i}});sel=best;showSel();draw()}P.delete(e.pointerId);ld=0};
+cv.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY<0?1.12:.89,e.offsetX,e.offsetY);draw()},{passive:false});
+$('#gs').oninput=e=>{gq=e.target.value.toLowerCase();draw()};
+main.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{gty=c.dataset.c;main.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===c));draw()});loop()}
+addEventListener('resize',()=>{if(location.hash==='#graph')route()});
+/* ---------- router ---------- */
+function route(){cancelAnimationFrame(raf);cx=null;main.style.padding='';const h=location.hash||'#notes';let v=h.slice(1).split('/')[0];
+document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.v===(v==='n'||v==='t'?'notes':v)));main.scrollTop=0;
+if(v==='n'){edit=keepEdit;keepEdit=false;vNote(decodeURIComponent(h.slice(3)))}else if(v==='t')vNotes(decodeURIComponent(h.slice(3)));else if(v==='graph')vGraph();else if(v==='think')vThink();else if(v==='actions')vActions();else if(v==='import')vImport();else vNotes()}
+addEventListener('hashchange',()=>{route()});
+(async()=>{const d=await load();if(d&&d.notes&&Object.keys(d.notes).length){S=d}else{S.key=(d&&d.key)||'';seed();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});return}route();
+try{navigator.storage&&navigator.storage.persist()}catch(e){}
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})})();
+</script>
+</body>
+</html>
